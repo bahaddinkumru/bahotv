@@ -11,11 +11,9 @@ export const Verify = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Login veya Register sayfasından yönlendirilen maili al
     const email = location.state?.email;
 
     useEffect(() => {
-        // Eğer email bilgisi yoksa (direkt URL'den girildiyse) login'e at
         if (!email) {
             navigate('/');
         }
@@ -31,29 +29,23 @@ export const Verify = () => {
         }
 
         try {
-            // AuthContext içindeki verify fonksiyonunu çağırıyoruz
             await verify({ email, code });
 
-            // Başarılı olursa App.tsx'deki yönlendirme (Navigate to="/video") devreye girecek
-            // Ancak kullanıcı deneyimi için anlık bir başarı mesajı gösterebiliriz
             setStatus({ type: 'success', message: 'Doğrulama başarılı! Yönlendiriliyorsunuz...' });
 
         } catch (err: any) {
             const backendMessage = err.message;
 
-            // SENARYO 1: Kodun süresi dolmuş (Backend otomatik yeni kod gönderdi)
             if (backendMessage === 'Kodun süresi dolmuş. Yeni doğrulama kodu gönderildi.') {
                 setStatus({
                     type: 'info',
                     message: 'Girdiğiniz kodun süresi dolmuş. E-postanıza yeni bir kod gönderdik, lütfen onu giriniz.'
                 });
-                setCode(''); // Inputu temizle
+                setCode('');
             }
-            // SENARYO 2: Rate Limit (Çok fazla deneme)
             else if (backendMessage?.includes('saniye sonra tekrar deneyin')) {
                 setStatus({ type: 'error', message: backendMessage });
             }
-            // SENARYO 3: Yanlış Kod veya diğer hatalar
             else {
                 setStatus({ type: 'error', message: backendMessage || 'Doğrulama başarısız.' });
             }
@@ -101,7 +93,6 @@ export const Verify = () => {
                                 type="text"
                                 value={code}
                                 onChange={(e) => {
-                                    // Sadece rakam girilmesine izin ver ve max 6 karakter
                                     const val = e.target.value.replace(/[^0-9]/g, '');
                                     if (val.length <= 6) setCode(val);
                                 }}
