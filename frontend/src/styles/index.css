@@ -1,0 +1,6 @@
+@import './tailwind.css';
+@import './theme.css';
+
+.guven {
+    transform: scaleX(-1);
+}
