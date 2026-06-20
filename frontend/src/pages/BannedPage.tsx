@@ -16,8 +16,6 @@ export function BannedPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Eğer oturum yoksa (login sırasında reddedilmişse) API çağrısı yapma
-        // Sadece state verilerini kullan
         if (!user) {
             setIsLoading(false);
             return;
@@ -94,7 +92,6 @@ export function BannedPage() {
                                     )}
                                 </div>
 
-                                {/* 🚀 KANIT FOTOĞRAFI VARSA GÖSTER */}
                                 {proofImage && (
                                     <div className="mt-4 pt-4 border-t border-red-900/50">
                                         <p className="text-xs text-slate-400 mb-2 flex items-center gap-1">

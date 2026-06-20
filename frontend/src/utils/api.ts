@@ -33,25 +33,20 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        // Skip refresh for login/register
         if (originalRequest.url?.includes('login') || originalRequest.url?.includes('register'))
             return Promise.reject(error);
 
-        // Handle Banned User
         if (error.response?.status === 403 && error.response?.data?.message === 'Hesabınız engellenmiştir.') {
             if (!window.location.pathname.includes('/banned'))
                 window.location.href = '/banned';
             return Promise.reject(error);
         }
 
-        // Handle 429 Too Many Requests
         if (error.response?.status === 429) {
             console.error('Rate limit hit. Please wait a moment.');
-            // Don't retry or redirect, just let it fail or the user wait
             return Promise.reject(error);
         }
 
-        // Handle 401 Unauthorized
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
@@ -80,10 +75,8 @@ api.interceptors.response.use(
                 processQueue(err, null);
                 isRefreshing = false;
 
-                // Clear session info
                 localStorage.removeItem('user');
 
-                // ONLY redirect if we are not already at "/" to prevent infinite loops
                 if (window.location.pathname !== '/' && window.location.pathname !== '') {
                     window.location.href = "/";
                 }

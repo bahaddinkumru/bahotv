@@ -368,7 +368,6 @@ export function VideoChat() {
             setIsSearching(false);
         });
 
-        // Backend'den gelen canlı veriyi yakala ve state'e yaz
         socket.on('live_stats', (data) => {
             setStats(data);
         });
@@ -392,7 +391,7 @@ export function VideoChat() {
         incomingStreamRef.current = null;
 
         setIsConnected(false);
-        setIsSearching(false); // Aramayı da varsayılan olarak durduruyoruz (startMatching içinde tekrar set edilecek)
+        setIsSearching(false);
         currentPartnerIdRef.current = null;
         currentPartnerDbIdRef.current = null;
 
@@ -474,8 +473,8 @@ export function VideoChat() {
             startMatching();
             setTimeout(() => {
                 setIsNextDisabled(false);
-            }, 1500 + Math.random() * 500); // Rastgele gecikme
-        }, 800 + Math.random() * 700); // 800-1500ms arası rastgele gecikme
+            }, 1500 + Math.random() * 500);
+        }, 800 + Math.random() * 700);
     };
 
     const handleDisconnectAndBack = async () => {
@@ -528,8 +527,6 @@ export function VideoChat() {
         if (remoteVideoRef.current && incomingStreamRef.current)
             remoteVideoRef.current.srcObject = incomingStreamRef.current;
     }, [isConnected]);
-
-    // Gereksiz 5 saniyelik backend ping'i kaldırıldı
 
     useEffect(() => {
         if (isServerReady && isCameraReady)

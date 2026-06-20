@@ -61,7 +61,7 @@ interface Report {
   createdAt: string;
   status: ComplaintStatus;
   proofImageUrl?: string | null;
-  adminNote?: string; // İleride çözülmüşleri listelerken okumak için
+  adminNote?: string;
 }
 
 export default function Reports() {
