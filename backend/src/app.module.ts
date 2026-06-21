@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { validate } from './common/config/env.validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -20,7 +21,8 @@ import { NotificationModule } from './modules/notification/notification.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig]
+      load: [databaseConfig],
+      validate,
     }),
     EventEmitterModule.forRoot(),
 
